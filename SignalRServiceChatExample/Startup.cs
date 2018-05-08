@@ -22,6 +22,7 @@ namespace SignalRServiceChatExample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSignalR().AddAzureSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,7 +38,11 @@ namespace SignalRServiceChatExample
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseFileServer();
+            app.UseAzureSignalR(routes =>
+            {
+                routes.MapHub<Chat>("/chat");
+            });
 
             app.UseMvc(routes =>
             {
